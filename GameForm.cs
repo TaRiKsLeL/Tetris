@@ -32,7 +32,7 @@ namespace Tetris
         {
             if (!checkLose(masiv))
             {
-                if (masiv[k + 1, x] != 1 && masiv[k + 1, 6] != 2)
+                if (masiv[k + 1, x] != 1 && masiv[k + 1, x] != 2)
                 {
                     if (prevX != 0)
                     {
@@ -49,10 +49,15 @@ namespace Tetris
                     x = 6;
                 }
 
-                if (k == 0 && getWinRowIndex(masiv)!=0)  //якщо фігура зупинилась і є заповнений рядок
+                if (k == 0 && getWinRowIndex(masiv) != 0)  //якщо фігура зупинилась і є заповнений рядок
                 {
                     int ind = getWinRowIndex(masiv);
 
+                    for (int i = 0; i < masiv.Length / (masiv.GetUpperBound(0) + 1); i++)
+                    {
+                        masiv[ind, i] = 0;
+                    }
+                    setFrame(masiv);
                     ///////////////////////////.....//        ЗАКІНЧИТИ ЗАБИРАННЯ РЯДКА ПО ІНДЕКСУ І ЗСУВАННЯ
                 }
                 setLabelsFromArray(masiv);
@@ -153,7 +158,7 @@ namespace Tetris
         {
             if (e.KeyCode == Keys.Left)
             {
-                if (x > 1 || x < 9)
+                if (x > 0 || x < 10)
                 {
                     prevX = x;
                     x -= 1;
@@ -162,7 +167,7 @@ namespace Tetris
 
             if (e.KeyCode == Keys.Right)
             {
-                if (x > 1 || x < 9)
+                if (x > 0 || x < 10)
                 {
                     prevX = x;
                     x += 1;
