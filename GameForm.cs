@@ -34,10 +34,10 @@ namespace Tetris
             {
                 if (masiv[k + 1, x] != 1 && masiv[k + 1, x] != 2)
                 {
-                    if (prevX != 0)
-                    {
-                        masiv[k, prevX] = 0;
-                    }
+                    //if (prevX != 0)
+                    //{
+                    //    masiv[k, prevX] = 0;
+                    //}
                     masiv[k, x] = 0;
                     masiv[k + 1, x] = 3;
                     k++;
@@ -158,19 +158,21 @@ namespace Tetris
         {
             if (e.KeyCode == Keys.Left)
             {
-                if (x > 0 || x < 10)
-                {
-                    prevX = x;
-                    x -= 1;
-                }
+               if(masiv[k,x-1]!=2 && masiv[k, x - 1] != 1)
+               {
+                  masiv[k, x] = 0;
+                  x -= 1;
+               }
+                    
             }
 
             if (e.KeyCode == Keys.Right)
             {
-                if (x > 0 || x < 10)
+
+                if (masiv[k, x + 1] != 2 && masiv[k, x + 1]!=1) // зміни тільки тоді, якщо елемент збоку != 2
                 {
-                    prevX = x;
-                    x += 1;
+                        masiv[k, x] = 0;
+                        x += 1;
                 }
             }
         }
