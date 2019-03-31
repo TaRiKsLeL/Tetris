@@ -58,6 +58,8 @@ namespace Tetris
                         masiv[ind, i] = 0;
                     }
                     setFrame(masiv);
+
+                    moveRows(masiv, ind);
                     ///////////////////////////.....//        ЗАКІНЧИТИ ЗАБИРАННЯ РЯДКА ПО ІНДЕКСУ І ЗСУВАННЯ
                 }
                 setLabelsFromArray(masiv);
@@ -153,6 +155,40 @@ namespace Tetris
 
             return index;
         }
+
+        void moveRows(int [,] arr,int winIndex)
+        {
+            int rows = masiv.GetUpperBound(0) + 1;
+            int cols = masiv.Length / rows;
+
+            int rowInd = 0;
+
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < cols; j++)
+                {
+                    if (arr[i, j] == 2)
+                    {
+                        rowInd=i;
+                        break;
+                    }
+                }
+                if (rowInd != 0)
+                {
+                    break;
+                }
+            }
+
+            while (winIndex!=(rowInd-1))
+            {
+                for (int j = 0; j < cols; j++)
+                {
+                    arr[winIndex, j] = arr[winIndex - 1, j];
+                }
+                winIndex--;
+            }
+
+    }
 
         private void GameForm_KeyDown(object sender, KeyEventArgs e)
         {
