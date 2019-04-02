@@ -12,55 +12,62 @@ namespace Tetris
 {
     public partial class GameForm : Form
     {
-        int[,] masiv = new int[22, 12];
+        public int[,] masiv = new int[22, 12];
         int x=6;
         int prevX;
         int k = 0;
+        int score=0;
+
+        Figure f;
+
         public GameForm()
         {
             InitializeComponent();
 
+            f = new Figure(this);
+
             setLabels();
 
             setFrame(masiv);
-            printArray(masiv);
+            
             setLabelsFromArray(masiv);
+
             timer1.Enabled = true;
+
+            printArray(masiv);
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
             if (!checkLose(masiv))
             {
-                if (masiv[k + 1, x] != 1 && masiv[k + 1, x] != 2)
+                if (!f.ElemBelowIs(masiv,1) && !f.ElemBelowIs(masiv, 2))
                 {
-                    //if (prevX != 0)
-                    //{
-                    //    masiv[k, prevX] = 0;
-                    //}
-                    masiv[k, x] = 0;
-                    masiv[k + 1, x] = 3;
-                    k++;
+                    f.moveBelow();
                 }
                 else //якщо наступне є двійкою або одиничкою
                 {
-                    masiv[k, x] = 2;
-                    k = 0;
-                    x = 6;
+                    f.disableFigure();
+                    f = new Figure(this);
                 }
 
                 if (k == 0 && getWinRowIndex(masiv) != 0)  //якщо фігура зупинилась і є заповнений рядок
                 {
                     int ind = getWinRowIndex(masiv);
 
-                    for (int i = 0; i < masiv.Length / (masiv.GetUpperBound(0) + 1); i++)
+                    if (ind == masiv.Length / (masiv.GetUpperBound(0)))
                     {
-                        masiv[ind, i] = 0;
+                        for (int i = 0; i < masiv.Length / (masiv.GetUpperBound(0) + 1); i++)
+                        {
+                            masiv[ind, i] = 0;
+                        }
+                        setFrame(masiv);
                     }
-                    setFrame(masiv);
 
                     moveRows(masiv, ind);
-                    ///////////////////////////.....//        ЗАКІНЧИТИ ЗАБИРАННЯ РЯДКА ПО ІНДЕКСУ І ЗСУВАННЯ
+
+                   score += 100;
+                   scoreLbl.Text = "SCORE:" + score;
                 }
                 setLabelsFromArray(masiv);
                 printArray(masiv);
@@ -70,6 +77,8 @@ namespace Tetris
                 timer1.Enabled = false;
                 closeGame();
                 MessageBox.Show("LOSE", "!!!");
+
+               // Figure f = new Figure();
             }
             Invalidate();
         }
@@ -194,22 +203,26 @@ namespace Tetris
         {
             if (e.KeyCode == Keys.Left)
             {
-               if(masiv[k,x-1]!=2 && masiv[k, x - 1] != 1)
-               {
-                  masiv[k, x] = 0;
-                  x -= 1;
-               }
+                if (f.allowMoveSideways(true))
+                {
+                    f.moveSideways(true);
+                }
+                
                     
             }
 
             if (e.KeyCode == Keys.Right)
             {
-
-                if (masiv[k, x + 1] != 2 && masiv[k, x + 1]!=1) // зміни тільки тоді, якщо елемент збоку != 2
+                if (f.allowMoveSideways(false))
                 {
-                        masiv[k, x] = 0;
-                        x += 1;
+                    f.moveSideways(false);
                 }
+            }
+
+            if (e.KeyCode == Keys.Up)
+            {
+                f.rotate();
+
             }
         }
 
@@ -235,9 +248,14 @@ namespace Tetris
                     {
                         tableLayoutPanel1.GetControlFromPosition(j, i).BackColor = Color.DarkCyan;
                     }
-                    if (array[i + 1, j + 1] == 3 || array[i + 1, j + 1] == 2)
+                    if (array[i + 1, j + 1] == 3)
                     {
                         tableLayoutPanel1.GetControlFromPosition(j, i).BackColor = Color.OrangeRed;
+                    }
+
+                    if (array[i + 1, j + 1] == 2)
+                    {
+                        tableLayoutPanel1.GetControlFromPosition(j, i).BackColor = Color.Red;
                     }
                 }
             }
@@ -253,7 +271,7 @@ namespace Tetris
                     Label label = new Label();
                     label.Dock = DockStyle.Fill;
                     label.BackColor = Color.Gray;
-                    label.Margin = new Padding(2);
+                    label.Margin = new Padding(1);
                     tableLayoutPanel1.Controls.Add(label,j,i);
                 }
             }
