@@ -13,9 +13,6 @@ namespace Tetris
     public partial class GameForm : Form
     {
         public int[,] masiv = new int[22, 12];
-        int x=6;
-        int prevX;
-        int k = 0;
         int score=0;
 
         Figure f;
@@ -41,7 +38,7 @@ namespace Tetris
         {
             if (!checkLose(masiv))
             {
-                if (!f.ElemBelowIs(masiv,1) && !f.ElemBelowIs(masiv, 2))
+                if (!f.ElemBelowIs(1) && !f.ElemBelowIs(2))
                 {
                     f.moveBelow();
                 }
@@ -51,7 +48,7 @@ namespace Tetris
                     f = new Figure(this);
                 }
 
-                if (k == 0 && getWinRowIndex(masiv) != 0)  //якщо фігура зупинилась і є заповнений рядок
+                if (getWinRowIndex(masiv) != 0)  //якщо фігура зупинилась і є заповнений рядок
                 {
                     int ind = getWinRowIndex(masiv);
 
@@ -78,7 +75,6 @@ namespace Tetris
                 closeGame();
                 MessageBox.Show("LOSE", "!!!");
 
-               // Figure f = new Figure();
             }
             Invalidate();
         }
@@ -221,8 +217,12 @@ namespace Tetris
 
             if (e.KeyCode == Keys.Up)
             {
-                f.rotate();
-
+                if (!f.ElemBelowIs(1) && !f.ElemBelowIs(2))
+                {
+                    f.rotate();
+                }
+                //f.rotate_point();
+                
             }
         }
 

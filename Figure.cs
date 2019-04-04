@@ -114,17 +114,17 @@ namespace Tetris
                     break;
             }
 
-            setFigureInArray(g.masiv);
+            setFigureInArray();
             
         }
 
-        public void setFigureInArray(int [,] arr)
+        public void setFigureInArray()
         {
             foreach (Point p in figure)
             {
                 if(!(p.x<0) && !(p.y < 0))
                 {
-                    arr[p.y, p.x] = 3;
+                    g.masiv[p.y, p.x] = 3;
                 }
             }
         }
@@ -254,91 +254,281 @@ namespace Tetris
             return true;
         }
 
-        public void rotate()
+        public void rotate_point()
         {
             foreach (Point p in figure)
             {
+                double s = Math.Sin((Math.PI / 180) * 90);
+                double c = Math.Cos((Math.PI / 180) * 90);
 
-                //if (rotatePoint.x == p.x + 1)
-                //{
-                //    p.y--;
-                //}
-                //if (rotatePoint.y == p.y - 1)
-                //{
-                //    p.x--;
-                //}
-                //if (rotatePoint.x == p.x - 1)
-                //{
-                //    p.y++;
-                //}
-                //if (rotatePoint.y == p.y + 1)
-                //{
-                //    p.x++;
-                //}
+                // translate point back to origin:
+                p.x -= rotatePoint.x;
+                p.y -= rotatePoint.y;
 
-                if(p.x==rotatePoint.x-1 && p.y == rotatePoint.y + 1)
-                {
-                    p.x += 2;
-                }
-                if(p.x==rotatePoint.x && p.x == rotatePoint.y + 1)
-                {
-                    p.x = rotatePoint.x + 1;
-                    p.y -= 1;
-                }
-                if(p.x==rotatePoint.x+1 && p.y == rotatePoint.y + 1)
-                {
-                    p.x = rotatePoint.x + 1;
-                    p.y = rotatePoint.y - 1;
-                }
-                if(p.x==rotatePoint.x+1 && p.y == rotatePoint.y)
-                {
-                    p.x = rotatePoint.x;
-                    p.y -= 1;
-                }
-                if(p.x==rotatePoint.x+1 && p.y == rotatePoint.y - 1)
-                {
-                    p.x -= 2;
-                }
-                if (p.x == rotatePoint.x && p.y == rotatePoint.y - 1)
-                {
-                    p.x -= 1;
-                    p.y += 1;
-                }
-                if(p.x==rotatePoint.x-1 && p.y == rotatePoint.y - 1)
-                {
-                    p.y += 2;
-                }
-                if(p.x==rotatePoint.x-1 && p.y == rotatePoint.y)
-                {
-                    p.x = rotatePoint.x;
-                    p.y = rotatePoint.y + 1;
-                }
+                // rotate point
+                double xnew = p.x * c - p.y * s;
+                double ynew = p.x * s + p.y * c;
 
+                // translate point back:
+                p.x = (int)(xnew + rotatePoint.x);
+                p.y = (int)( ynew + rotatePoint.y);
+            }
+            
+        }
 
-                //if (rotatePoint.x == p.x + 1)
-                //{
-                //    p.y = rotatePoint.y - 1;
-                //    p.x = rotatePoint.x;
-                //}
-                //if (rotatePoint.y == p.y - 1)
-                //{
-                //    p.y = rotatePoint.y;
-                //    p.x = rotatePoint.x - 1;
-                //}
-                //if (rotatePoint.x == p.x - 1)
-                //{
-                //    p.y = rotatePoint.y+1;
-                //    p.x = rotatePoint.x;
-                //}
-                //if (rotatePoint.y == p.y + 1)
-                //{
-                //    p.y = rotatePoint.y;
-                //    p.x = rotatePoint.x+1;
-                //}
+        public void rotate()
+        {
+            ArrayList tempFigure = (ArrayList)figure.Clone(); //зберігаю значення точок фігури
 
+            bool mistakeFlag=false;
 
+            foreach (Point p in figure)
+            {
+                if (p != rotatePoint)
+                {
+                    if (p.x == rotatePoint.x - 1 && p.y == rotatePoint.y + 1)
+                    {
+                        if (!(p.x < 0) && !(p.y < 0))
+                            g.masiv[p.y, p.x] = 0;
+                        p.x += 2;
+
+                        if (!(p.x < 0) && !(p.y < 0))
+                        {
+                            if (!(p.x < 0) && !(p.y < 0) && g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
+                            {
+                                mistakeFlag = true;
+                            }
+                        }
+
+                        if (!(p.x < 0) && !(p.y < 0))
+                            g.masiv[p.y, p.x] = 3;
+                    }
+                    else if (p.x == rotatePoint.x && p.y == rotatePoint.y + 1)
+                    {
+                        if (!(p.x < 0) && !(p.y < 0))
+                            g.masiv[p.y, p.x] = 0;
+                        p.x = rotatePoint.x + 1;
+                        p.y -= 1;
+
+                        if (!(p.x < 0) && !(p.y < 0))
+                        {
+                            if (!(p.x < 0) && !(p.y < 0) && g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
+                            {
+                                mistakeFlag = true;
+                            }
+                        }
+
+                        if (!(p.x < 0) && !(p.y < 0))
+                            g.masiv[p.y, p.x] = 3;
+                    }
+                    else if (p.x == rotatePoint.x + 1 && p.y == rotatePoint.y + 1)
+                    {
+                        if (!(p.x < 0) && !(p.y < 0))
+                            g.masiv[p.y, p.x] = 0;
+                        p.x = rotatePoint.x + 1;
+                        p.y = rotatePoint.y - 1;
+
+                        if (!(p.x < 0) && !(p.y < 0))
+                        {
+                            if (!(p.x < 0) && !(p.y < 0) && g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
+                            {
+                                mistakeFlag = true;
+                            }
+                        }
+
+                        if (!(p.x < 0) && !(p.y < 0))
+                            g.masiv[p.y, p.x] = 3;
+                    }
+                    else if (p.x == rotatePoint.x + 1 && p.y == rotatePoint.y)
+                    {
+                        if (!(p.x < 0) && !(p.y < 0))
+                            g.masiv[p.y, p.x] = 0;
+                        p.x = rotatePoint.x;
+                        p.y -= 1;
+
+                        if (!(p.x < 0) && !(p.y < 0))
+                        {
+                            if (!(p.x < 0) && !(p.y < 0) && g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
+                            {
+                                mistakeFlag = true;
+                            }
+                        }
+
+                        if (!(p.x < 0) && !(p.y < 0))
+                            g.masiv[p.y, p.x] = 3;
+                    }
+                    else if (p.x == rotatePoint.x + 1 && p.y == rotatePoint.y - 1)
+                    {
+                        if (!(p.x < 0) && !(p.y < 0))
+                            g.masiv[p.y, p.x] = 0;
+                        p.x -= 2;
+
+                        if (!(p.x < 0) && !(p.y < 0))
+                        {
+                            if (!(p.x < 0) && !(p.y < 0) && g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
+                            {
+                                mistakeFlag = true;
+                            }
+                        }
+
+                        if (!(p.x < 0) && !(p.y < 0))
+                            g.masiv[p.y, p.x] = 3;
+                    }
+                    else if (p.x == rotatePoint.x && p.y == rotatePoint.y - 1)
+                    {
+                        if (!(p.x < 0) && !(p.y < 0))
+                            g.masiv[p.y, p.x] = 0;
+                        p.x -= 1;
+                        p.y += 1;
+
+                        if (!(p.x < 0) && !(p.y < 0))
+                        {
+                            if (!(p.x < 0) && !(p.y < 0) && g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
+                            {
+                                mistakeFlag = true;
+                            }
+                        }
+
+                        if (!(p.x < 0) && !(p.y < 0))
+                            g.masiv[p.y, p.x] = 3;
+                    }
+                    else if (p.x == rotatePoint.x - 1 && p.y == rotatePoint.y - 1)
+                    {
+                        if (!(p.x < 0) && !(p.y < 0))
+                            g.masiv[p.y, p.x] = 0;
+                        p.y += 2;
+
+                        if (!(p.x < 0) && !(p.y < 0))
+                        {
+                            if (!(p.x < 0) && !(p.y < 0) && g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
+                            {
+                                mistakeFlag = true;
+                            }
+                        }
+
+                        if (!(p.x < 0) && !(p.y < 0))
+                            g.masiv[p.y, p.x] = 3;
+                    }
+                    else if (p.x == rotatePoint.x - 1 && p.y == rotatePoint.y)
+                    {
+                        if (!(p.x < 0) && !(p.y < 0))
+                            g.masiv[p.y, p.x] = 0;
+                        p.x = rotatePoint.x;
+                        p.y = rotatePoint.y + 1;
+
+                        if (!(p.x < 0) && !(p.y < 0))
+                        {
+                            if (!(p.x < 0) && !(p.y < 0) && g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
+                            {
+                                mistakeFlag = true;
+                            }
+                        }
+
+                        if (!(p.x < 0) && !(p.y < 0))
+                            g.masiv[p.y, p.x] = 3;
+                    }
+
+                    else if(p.x==rotatePoint.x && p.y == rotatePoint.y - 2)
+                    {
+                        if (!(p.x < 0) && !(p.y < 0))
+                            g.masiv[p.y, p.x] = 0;
+                        p.x -=2;
+                        p.y +=2;
+
+                        if (!(p.x < 0) && !(p.y < 0))
+                        {
+                            if (!(p.x < 0) && !(p.y < 0) && g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
+                            {
+                                mistakeFlag = true;
+                            }
+                        }
+
+                        if (!(p.x < 0) && !(p.y < 0))
+                            g.masiv[p.y, p.x] = 3;
+                    }
+
+                    else if (p.x == rotatePoint.x && p.y == rotatePoint.y - 2)
+                    {
+                        if (!(p.x < 0) && !(p.y < 0))
+                            g.masiv[p.y, p.x] = 0;
+                        p.x -= 2;
+                        p.y += 2;
+
+                        if (!(p.x < 0) && !(p.y < 0))
+                        {
+                            if (!(p.x < 0) && !(p.y < 0) && g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
+                            {
+                                mistakeFlag = true;
+                            }
+                        }
+
+                        if (!(p.x < 0) && !(p.y < 0))
+                            g.masiv[p.y, p.x] = 3;
+                    }
+                    else if (p.x == rotatePoint.x-2 && p.y == rotatePoint.y)
+                    {
+                        if (!(p.x < 0) && !(p.y < 0))
+                            g.masiv[p.y, p.x] = 0;
+                        p.x += 2;
+                        p.y += 2;
+
+                        if (!(p.x < 0) && !(p.y < 0))
+                        {
+                            if (!(p.x < 0) && !(p.y < 0) && g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
+                            {
+                                mistakeFlag = true;
+                            }
+                        }
+
+                        if (!(p.x < 0) && !(p.y < 0))
+                            g.masiv[p.y, p.x] = 3;
+                    }
+                    else if (p.x == rotatePoint.x && p.y == rotatePoint.y+2)
+                    {
+                        if (!(p.x < 0) && !(p.y < 0))
+                            g.masiv[p.y, p.x] = 0;
+                        p.x += 2;
+                        p.y -= 2;
+
+                        if (!(p.x < 0) && !(p.y < 0))
+                        {
+                            if (!(p.x < 0) && !(p.y < 0) && g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
+                            {
+                                mistakeFlag = true;
+                            }
+                        }
+
+                        if (!(p.x < 0) && !(p.y < 0))
+                            g.masiv[p.y, p.x] = 3;
+                    }
+                    else if (p.x == rotatePoint.x+2 && p.y == rotatePoint.y)
+                    {
+                        if (!(p.x < 0) && !(p.y < 0))
+                            g.masiv[p.y, p.x] = 0;
+                        p.x -= 2;
+                        p.y -= 2;
+
+                        if (!(p.x < 0) && !(p.y < 0))
+                        {
+                            if (!(p.x < 0) && !(p.y < 0) && g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
+                            {
+                                mistakeFlag = true;
+                            }
+                        }
+
+                        if (!(p.x < 0) && !(p.y < 0))
+                            g.masiv[p.y, p.x] = 3;
+                    }
+
+                    if (mistakeFlag)
+                    {
+                        figure = tempFigure;
+                        break;
+                    }
+                }
 
             }
+
         }
 
         public void disableFigure()
@@ -352,10 +542,10 @@ namespace Tetris
             }
         }
 
-        public bool ElemBelowIs(int [,] mainArr, int digit) //Перевірка, чи під трійкою, яка падає, є якась певна цифра
+        public bool ElemBelowIs(int digit) //Перевірка, чи під трійкою, яка падає, є якась певна цифра
         {
-            int rows = mainArr.GetUpperBound(0) + 1;
-            int cols = mainArr.Length / rows;
+            int rows = g.masiv.GetUpperBound(0) + 1;
+            int cols = g.masiv.Length / rows;
 
             int indexButtomRow = 0 ;
 
@@ -363,7 +553,7 @@ namespace Tetris
             {
                 for(int j = cols-1; j >=0; j--)
                 {
-                    if (mainArr[i, j] == 3)
+                    if (g.masiv[i, j] == 3)
                     {
                         indexButtomRow = i;
                         break;
@@ -377,9 +567,9 @@ namespace Tetris
 
             for(int j = 0; j < cols; j++)
             {
-                if (mainArr[indexButtomRow, j] == 3)
+                if (g.masiv[indexButtomRow, j] == 3)
                 {
-                    if(mainArr[indexButtomRow+1, j] == digit)
+                    if(g.masiv[indexButtomRow+1, j] == digit)
                     {
                         return true;
                     }
@@ -389,9 +579,9 @@ namespace Tetris
             if (indexButtomRow > 1) {
                 for (int j = 0; j < cols; j++)
                 {
-                    if (mainArr[indexButtomRow-1, j]==3)
+                    if (g.masiv[indexButtomRow-1, j]==3)
                     {
-                        if (mainArr[indexButtomRow, j] == digit)
+                        if (g.masiv[indexButtomRow, j] == digit)
                         {
                             return true;
                         }
