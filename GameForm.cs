@@ -17,7 +17,8 @@ namespace Tetris
 
         Figure f;
 
-        public GameForm()
+
+        public GameForm(int shapeColor, int speed)
         {
             InitializeComponent();
 
@@ -28,6 +29,20 @@ namespace Tetris
             setFrame(masiv);
             
             setLabelsFromArray(masiv);
+
+            if (speed == 1)
+            {
+                timer1.Interval = 220;
+            }
+            else if(speed==2)
+            {
+
+                timer1.Interval = 140;
+            }
+            else
+            {
+                timer1.Interval = 80;
+            }
 
             timer1.Enabled = true;
 

@@ -17,6 +17,7 @@ namespace Tetris
         public Form1()
         {
             InitializeComponent();
+            shapeCB.SelectedIndex = 0;
         }
 
         
@@ -38,10 +39,36 @@ namespace Tetris
                 SetProcessDPIAware();
             }
 
-            new GameForm().ShowDialog();
+            int gameSpeed;
+
+            if (lowBtn.Checked)
+            {
+                gameSpeed = 1;
+            }
+            else if(mediumBtn.Checked)
+            {
+                gameSpeed = 2;
+            }
+            else
+            {
+                gameSpeed = 3;
+            }
+
+
+            new GameForm(shapeCB.SelectedIndex,gameSpeed).ShowDialog();
 
         }
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         private static extern bool SetProcessDPIAware();
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
     }
 }
