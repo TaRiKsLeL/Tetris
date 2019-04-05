@@ -280,18 +280,18 @@ namespace Tetris
         {
             ArrayList tempFigure = CloneAndGetToNewArrayList(figure); //зберігаю значення точок фігури
 
-            bool mistakeFlag=false;
+            bool mistakeFlag = false;
 
             foreach (Point p in figure)
             {
                 if (p != rotatePoint)
                 {
-                    if (p.x == rotatePoint.x - 1 && p.y == rotatePoint.y + 1)
+                    if (p.x == rotatePoint.x - 1 && p.y == rotatePoint.y + 1) // точка, яка знаходить зліва на 1 і знизу на 1 від точки оберту
                     {
                         if (!(p.x < 0) && !(p.y < 0))
                             g.masiv[p.y, p.x] = 0;
 
-                        if (p.x+2 > 0 && p.y > 0 && p.x+2 < 12 && p.y < 12)
+                        if (p.x + 2 > 0  && p.x + 2 < 12 && p.y < 22)
                         {
                             p.x += 2;
 
@@ -304,25 +304,28 @@ namespace Tetris
                         {
                             mistakeFlag = true;
                         }
-                        
-                        
 
                         if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
                             g.masiv[p.y, p.x] = 3;
                     }
+
+
                     else if (p.x == rotatePoint.x && p.y == rotatePoint.y + 1)
                     {
                         if (!(p.x < 0) && !(p.y < 0))
                             g.masiv[p.y, p.x] = 0;
 
-                        if (rotatePoint.x + 1 > 0 && p.y - 1 > 0 && rotatePoint.x + 1 < 12 && p.y - 1 < 12)
+                        if (rotatePoint.x + 1 > 0  && rotatePoint.x + 1 < 12 && p.y - 1 < 22)
                         {
                             p.x = rotatePoint.x + 1;
                             p.y -= 1;
 
-                            if (g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
+                            if (p.y > 0)
                             {
-                                mistakeFlag = true;
+                                if (g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
+                                {
+                                    mistakeFlag = true;
+                                }
                             }
                         }
                         else
@@ -334,19 +337,24 @@ namespace Tetris
                         if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
                             g.masiv[p.y, p.x] = 3;
                     }
+
+
                     else if (p.x == rotatePoint.x + 1 && p.y == rotatePoint.y + 1)
                     {
                         if (!(p.x < 0) && !(p.y < 0))
                             g.masiv[p.y, p.x] = 0;
 
-                        if (rotatePoint.x + 1 > 0 && rotatePoint.y - 1 > 0 && rotatePoint.x + 1 < 12 && rotatePoint.y - 1 < 12)
+                        if (rotatePoint.x + 1 > 0 && rotatePoint.x + 1 < 12 && rotatePoint.y - 1 < 22)
                         {
                             p.x = rotatePoint.x + 1;
                             p.y = rotatePoint.y - 1;
 
-                            if (g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
+                            if (p.y > 0)
                             {
-                                mistakeFlag = true;
+                                if (g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
+                                {
+                                    mistakeFlag = true;
+                                }
                             }
                         }
                         else
@@ -354,45 +362,48 @@ namespace Tetris
                             mistakeFlag = true;
                         }
 
-                       
-                        
 
                         if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
                             g.masiv[p.y, p.x] = 3;
                     }
+
+
                     else if (p.x == rotatePoint.x + 1 && p.y == rotatePoint.y)
                     {
                         if (!(p.x < 0) && !(p.y < 0))
                             g.masiv[p.y, p.x] = 0;
 
-                        if (rotatePoint.x > 0 && p.y - 1 > 0 && rotatePoint.x < 12 && p.y - 1 < 12)
+                        if (rotatePoint.x > 0 &&  rotatePoint.x < 12 && p.y - 1 < 22)
                         {
                             p.x = rotatePoint.x;
                             p.y -= 1;
 
-                            if (g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
+                            if (p.y > 0)
                             {
-                                mistakeFlag = true;
+                                if (g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
+                                {
+                                    mistakeFlag = true;
+                                }
                             }
+                                
                         }
                         else
                         {
                             mistakeFlag = true;
                         }
 
-                        
-                       
-                        
 
                         if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
                             g.masiv[p.y, p.x] = 3;
                     }
+
+
                     else if (p.x == rotatePoint.x + 1 && p.y == rotatePoint.y - 1)
                     {
                         if (!(p.x < 0) && !(p.y < 0))
                             g.masiv[p.y, p.x] = 0;
 
-                        if (p.x-2 > 0 && p.y > 0 && p.x - 2 < 12 && p.y < 12)
+                        if (p.x - 2 > 0 && p.x - 2 < 12 && p.y < 22)
                         {
                             p.x -= 2;
 
@@ -406,10 +417,8 @@ namespace Tetris
                             mistakeFlag = true;
                         }
 
-                        
-                        
 
-                        if (!(p.x < 0) && !(p.y < 0) && mistakeFlag!=true)
+                        if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
                             g.masiv[p.y, p.x] = 3;
                     }
                     else if (p.x == rotatePoint.x && p.y == rotatePoint.y - 1)
@@ -417,10 +426,38 @@ namespace Tetris
                         if (!(p.x < 0) && !(p.y < 0))
                             g.masiv[p.y, p.x] = 0;
 
-                        if (p.x - 1 > 0 && p.y+1 > 0 && p.x -1 < 12 && p.y+1 < 12)
+                        if (p.x - 1 > 0 &&  p.x - 1 < 12 && p.y + 1 < 22)
                         {
                             p.x -= 1;
                             p.y += 1;
+
+                            if (p.y > 0)
+                            {
+                                if (g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
+                                {
+                                    mistakeFlag = true;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            mistakeFlag = true;
+                        }
+
+
+                        if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
+                            g.masiv[p.y, p.x] = 3;
+                    }
+
+
+                    else if (p.x == rotatePoint.x - 1 && p.y == rotatePoint.y - 1)
+                    {
+                        if (!(p.x < 0) && !(p.y < 0))
+                            g.masiv[p.y, p.x] = 0;
+
+                        if (p.x > 0 &&  p.x < 12 && p.y + 2 < 22)
+                        {
+                            p.y += 2;
 
                             if (g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
                             {
@@ -432,64 +469,30 @@ namespace Tetris
                             mistakeFlag = true;
                         }
 
-                        
-                        
 
                         if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
                             g.masiv[p.y, p.x] = 3;
                     }
-                    else if (p.x == rotatePoint.x - 1 && p.y == rotatePoint.y - 1)
-                    {
-                        if (!(p.x < 0) && !(p.y < 0))
-                            g.masiv[p.y, p.x] = 0;
 
-                        if (p.x > 0 && p.y + 2 > 0 && p.x < 12 && p.y + 2 < 12)
-                        {
-                            p.y += 2;
-                        }
 
-                        
-                        if (g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
-                        {
-                                mistakeFlag = true;
-                        }
-                        
-
-                        if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
-                            g.masiv[p.y, p.x] = 3;
-                    }
                     else if (p.x == rotatePoint.x - 1 && p.y == rotatePoint.y)
                     {
                         if (!(p.x < 0) && !(p.y < 0))
                             g.masiv[p.y, p.x] = 0;
-                        p.x = rotatePoint.x;
-                        p.y = rotatePoint.y + 1;
 
-                        if (!(p.x < 0) && !(p.y < 0))
+                        if (rotatePoint.x > 0  && rotatePoint.x < 12 && rotatePoint.y + 1 < 22)
                         {
-                            if (!(p.x < 0) && !(p.y < 0) && g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
+                            p.x = rotatePoint.x;
+                            p.y = rotatePoint.y + 1;
+
+                            if (g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
                             {
                                 mistakeFlag = true;
                             }
                         }
-
-                        if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
-                            g.masiv[p.y, p.x] = 3;
-                    }
-
-                    else if(p.x==rotatePoint.x && p.y == rotatePoint.y - 2)
-                    {
-                        if (!(p.x < 0) && !(p.y < 0))
-                            g.masiv[p.y, p.x] = 0;
-                        p.x -=2;
-                        p.y +=2;
-
-                        if (!(p.x < 0) && !(p.y < 0))
+                        else
                         {
-                            if (!(p.x < 0) && !(p.y < 0) && g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
-                            {
-                                mistakeFlag = true;
-                            }
+                            mistakeFlag = true;
                         }
 
                         if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
@@ -500,26 +503,62 @@ namespace Tetris
                     {
                         if (!(p.x < 0) && !(p.y < 0))
                             g.masiv[p.y, p.x] = 0;
-                        p.x -= 2;
-                        p.y += 2;
 
-                        if (!(p.x < 0) && !(p.y < 0))
+                        if (p.x - 2 > 0 && p.x - 2 < 12 && p.y + 2 < 22)
                         {
-                            if (!(p.x < 0) && !(p.y < 0) && g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
+                            p.x -= 2;
+                            p.y += 2;
+
+                            if (p.y > 0)
                             {
-                                mistakeFlag = true;
+                                if (g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
+                                {
+                                    mistakeFlag = true;
+                                }
                             }
                         }
+                        else
+                        {
+                            mistakeFlag = true;
+                        }
+
 
                         if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
                             g.masiv[p.y, p.x] = 3;
                     }
-                    else if (p.x == rotatePoint.x-2 && p.y == rotatePoint.y)
+
+                    else if (p.x == rotatePoint.x && p.y == rotatePoint.y - 2)
                     {
                         if (!(p.x < 0) && !(p.y < 0))
                             g.masiv[p.y, p.x] = 0;
 
-                        if (p.x + 2 > 0 && p.y + 2 > 0 && p.x + 2 < 12 && p.y + 2 < 12)
+                        if ((p.x - 2 > 0)  && (p.x - 2 < 12) && (p.y + 2 < 22))
+                        {
+                            p.x -= 2;
+                            p.y += 2;
+
+                            if (g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
+                            {
+                                mistakeFlag = true;
+                            }
+                        }
+                        else
+                        {
+                            mistakeFlag = true;
+                        }
+
+
+                        if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
+                            g.masiv[p.y, p.x] = 3;
+                    }
+
+
+                    else if (p.x == rotatePoint.x - 2 && p.y == rotatePoint.y)
+                    {
+                        if (!(p.x < 0) && !(p.y < 0))
+                            g.masiv[p.y, p.x] = 0;
+
+                        if (p.x + 2 > 0  && p.x + 2 < 12 && p.y + 2 < 22)
                         {
                             p.x += 2;
                             p.y += 2;
@@ -534,18 +573,18 @@ namespace Tetris
                             mistakeFlag = true;
                         }
 
-                        
-                        
 
                         if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
                             g.masiv[p.y, p.x] = 3;
                     }
-                    else if (p.x == rotatePoint.x && p.y == rotatePoint.y+2)
+
+
+                    else if (p.x == rotatePoint.x && p.y == rotatePoint.y + 2)
                     {
                         if (!(p.x < 0) && !(p.y < 0))
                             g.masiv[p.y, p.x] = 0;
 
-                        if (p.x + 2 > 0 && p.y - 2 > 0 && p.x + 2 < 12 && p.y - 2 < 12)
+                        if (p.x + 2 > 0  && p.x + 2 < 12 && p.y - 2 < 22)
                         {
                             p.x += 2;
                             p.y -= 2;
@@ -560,18 +599,18 @@ namespace Tetris
                             mistakeFlag = true;
                         }
 
-                        
-                        
 
                         if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
                             g.masiv[p.y, p.x] = 3;
                     }
-                    else if (p.x == rotatePoint.x+2 && p.y == rotatePoint.y)
+
+
+                    else if (p.x == rotatePoint.x + 2 && p.y == rotatePoint.y)
                     {
                         if (!(p.x < 0) && !(p.y < 0))
                             g.masiv[p.y, p.x] = 0;
 
-                        if (p.x - 2 > 0 && p.y - 2 > 0 && p.x - 2 < 12 && p.y - 2 < 12)
+                        if (p.x - 2 > 0 &&  p.x - 2 < 12 && p.y - 2 < 22)
                         {
                             p.x -= 2;
                             p.y -= 2;
@@ -585,10 +624,6 @@ namespace Tetris
                         {
                             mistakeFlag = true;
                         }
-
-                        
-                            
-                        
 
                         if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
                             g.masiv[p.y, p.x] = 3;
@@ -604,6 +639,358 @@ namespace Tetris
             }
 
         }
+
+  //      public void rotate()
+        //{
+        //    ArrayList tempFigure = CloneAndGetToNewArrayList(figure); //зберігаю значення точок фігури
+
+        //    bool mistakeFlag=false;
+
+        //    foreach (Point p in figure)
+        //    {
+        //        if (p != rotatePoint)
+        //        {
+        //            if (p.x == rotatePoint.x - 1 && p.y == rotatePoint.y + 1)
+        //            {
+        //                if (!(p.x < 0) && !(p.y < 0))
+        //                    g.masiv[p.y, p.x] = 0;
+
+        //                if (p.x+2 > 0 && p.y > 0 && p.x+2 < 12 && p.y < 12)
+        //                {
+        //                    p.x += 2;
+
+        //                    if (g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
+        //                    {
+        //                        mistakeFlag = true;
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    mistakeFlag = true;
+        //                }
+                        
+                        
+
+        //                if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
+        //                    g.masiv[p.y, p.x] = 3;
+        //            }
+        //            else if (p.x == rotatePoint.x && p.y == rotatePoint.y + 1)
+        //            {
+        //                if (!(p.x < 0) && !(p.y < 0))
+        //                    g.masiv[p.y, p.x] = 0;
+
+        //                if (rotatePoint.x + 1 > 0 && p.y - 1 > 0 && rotatePoint.x + 1 < 12 && p.y - 1 < 12)
+        //                {
+        //                    p.x = rotatePoint.x + 1;
+        //                    p.y -= 1;
+
+        //                    if (g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
+        //                    {
+        //                        mistakeFlag = true;
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    mistakeFlag = true;
+        //                }
+
+
+        //                if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
+        //                    g.masiv[p.y, p.x] = 3;
+        //            }
+        //            else if (p.x == rotatePoint.x + 1 && p.y == rotatePoint.y + 1)
+        //            {
+        //                if (!(p.x < 0) && !(p.y < 0))
+        //                    g.masiv[p.y, p.x] = 0;
+
+        //                if (rotatePoint.x + 1 > 0 && rotatePoint.y - 1 > 0 && rotatePoint.x + 1 < 12 && rotatePoint.y - 1 < 12)
+        //                {
+        //                    p.x = rotatePoint.x + 1;
+        //                    p.y = rotatePoint.y - 1;
+
+        //                    if (g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
+        //                    {
+        //                        mistakeFlag = true;
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    mistakeFlag = true;
+        //                }
+
+                       
+                        
+
+        //                if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
+        //                    g.masiv[p.y, p.x] = 3;
+        //            }
+        //            else if (p.x == rotatePoint.x + 1 && p.y == rotatePoint.y)
+        //            {
+        //                if (!(p.x < 0) && !(p.y < 0))
+        //                    g.masiv[p.y, p.x] = 0;
+
+        //                if (rotatePoint.x > 0 && p.y - 1 > 0 && rotatePoint.x < 12 && p.y - 1 < 12)
+        //                {
+        //                    p.x = rotatePoint.x;
+        //                    p.y -= 1;
+
+        //                    if (g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
+        //                    {
+        //                        mistakeFlag = true;
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    mistakeFlag = true;
+        //                }
+
+                        
+                       
+                        
+
+        //                if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
+        //                    g.masiv[p.y, p.x] = 3;
+        //            }
+        //            else if (p.x == rotatePoint.x + 1 && p.y == rotatePoint.y - 1)
+        //            {
+        //                if (!(p.x < 0) && !(p.y < 0))
+        //                    g.masiv[p.y, p.x] = 0;
+
+        //                if (p.x-2 > 0 && p.y > 0 && p.x - 2 < 12 && p.y < 12)
+        //                {
+        //                    p.x -= 2;
+
+        //                    if (g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
+        //                    {
+        //                        mistakeFlag = true;
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    mistakeFlag = true;
+        //                }
+
+                        
+                        
+
+        //                if (!(p.x < 0) && !(p.y < 0) && mistakeFlag!=true)
+        //                    g.masiv[p.y, p.x] = 3;
+        //            }
+        //            else if (p.x == rotatePoint.x && p.y == rotatePoint.y - 1)
+        //            {
+        //                if (!(p.x < 0) && !(p.y < 0))
+        //                    g.masiv[p.y, p.x] = 0;
+
+        //                if (p.x - 1 > 0 && p.y+1 > 0 && p.x -1 < 12 && p.y+1 < 12)
+        //                {
+        //                    p.x -= 1;
+        //                    p.y += 1;
+
+        //                    if (g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
+        //                    {
+        //                        mistakeFlag = true;
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    mistakeFlag = true;
+        //                }
+
+                        
+                        
+
+        //                if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
+        //                    g.masiv[p.y, p.x] = 3;
+        //            }
+        //            else if (p.x == rotatePoint.x - 1 && p.y == rotatePoint.y - 1)
+        //            {
+        //                if (!(p.x < 0) && !(p.y < 0))
+        //                    g.masiv[p.y, p.x] = 0;
+
+        //                if (p.x > 0 && p.y + 2 > 0 && p.x < 12 && p.y + 2 < 12)
+        //                {
+        //                    p.y += 2;
+
+        //                    if (g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
+        //                    {
+        //                        mistakeFlag = true;
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    mistakeFlag = true;
+        //                }
+
+
+
+        //                if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
+        //                    g.masiv[p.y, p.x] = 3;
+        //            }
+        //            else if (p.x == rotatePoint.x - 1 && p.y == rotatePoint.y)
+        //            {
+        //                if (!(p.x < 0) && !(p.y < 0))
+        //                    g.masiv[p.y, p.x] = 0;
+
+        //                if (rotatePoint.x > 0 && rotatePoint.y + 1 > 0 && rotatePoint.x < 12 && rotatePoint.y + 1 < 12)
+        //                {
+        //                    p.x = rotatePoint.x;
+        //                    p.y = rotatePoint.y + 1;
+
+        //                    if (g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
+        //                    {
+        //                        mistakeFlag = true;
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    mistakeFlag = true;
+        //                }
+
+        //                if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
+        //                    g.masiv[p.y, p.x] = 3;
+        //            }
+
+        //            else if(p.x==rotatePoint.x && p.y == rotatePoint.y - 2)
+        //            {
+        //                if (!(p.x < 0) && !(p.y < 0))
+        //                    g.masiv[p.y, p.x] = 0;
+
+        //                if (p.x-2 > 0 && p.y + 2 > 0 && p.x -2 < 12 && p.y + 2 < 12)
+        //                {
+        //                    p.x -= 2;
+        //                    p.y += 2;
+
+        //                    if (g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
+        //                    {
+        //                        mistakeFlag = true;
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    mistakeFlag = true;
+        //                }
+
+
+        //                if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
+        //                    g.masiv[p.y, p.x] = 3;
+        //            }
+
+        //            else if (p.x == rotatePoint.x && p.y == rotatePoint.y - 2)
+        //            {
+        //                if (!(p.x < 0) && !(p.y < 0))
+        //                    g.masiv[p.y, p.x] = 0;
+
+        //                if ((p.x - 2 > 0) && (p.y + 2 > 0) && (p.x - 2 < 12) && (p.y + 2 < 12))
+        //                {
+        //                    p.x -= 2;
+        //                    p.y += 2;
+
+        //                    if (g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
+        //                    {
+        //                        mistakeFlag = true;
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    mistakeFlag = true;
+        //                }
+
+
+
+
+        //                if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
+        //                    g.masiv[p.y, p.x] = 3;
+        //            }
+        //            else if (p.x == rotatePoint.x-2 && p.y == rotatePoint.y)
+        //            {
+        //                if (!(p.x < 0) && !(p.y < 0))
+        //                    g.masiv[p.y, p.x] = 0;
+
+        //                if (p.x + 2 > 0 && p.y + 2 > 0 && p.x + 2 < 12 && p.y + 2 < 12)
+        //                {
+        //                    p.x += 2;
+        //                    p.y += 2;
+
+        //                    if (g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
+        //                    {
+        //                        mistakeFlag = true;
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    mistakeFlag = true;
+        //                }
+
+                        
+                        
+
+        //                if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
+        //                    g.masiv[p.y, p.x] = 3;
+        //            }
+        //            else if (p.x == rotatePoint.x && p.y == rotatePoint.y+2)
+        //            {
+        //                if (!(p.x < 0) && !(p.y < 0))
+        //                    g.masiv[p.y, p.x] = 0;
+
+        //                if (p.x + 2 > 0 && p.y - 2 > 0 && p.x + 2 < 12 && p.y - 2 < 12)
+        //                {
+        //                    p.x += 2;
+        //                    p.y -= 2;
+
+        //                    if (g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
+        //                    {
+        //                        mistakeFlag = true;
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    mistakeFlag = true;
+        //                }
+
+                        
+                        
+
+        //                if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
+        //                    g.masiv[p.y, p.x] = 3;
+        //            }
+        //            else if (p.x == rotatePoint.x+2 && p.y == rotatePoint.y)
+        //            {
+        //                if (!(p.x < 0) && !(p.y < 0))
+        //                    g.masiv[p.y, p.x] = 0;
+
+        //                if (p.x - 2 > 0 && p.y - 2 > 0 && p.x - 2 < 12 && p.y - 2 < 12)
+        //                {
+        //                    p.x -= 2;
+        //                    p.y -= 2;
+
+        //                    if (g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
+        //                    {
+        //                        mistakeFlag = true;
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    mistakeFlag = true;
+        //                }
+
+                        
+                            
+                        
+
+        //                if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
+        //                    g.masiv[p.y, p.x] = 3;
+        //            }
+
+        //            if (mistakeFlag)
+        //            {
+        //                figure = tempFigure;
+        //                break;
+        //            }
+        //        }
+
+        //    }
+
+        //}
 
         public ArrayList CloneAndGetToNewArrayList(ArrayList points)
         {
