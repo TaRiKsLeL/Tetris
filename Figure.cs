@@ -315,7 +315,7 @@ namespace Tetris
                         if (!(p.x < 0) && !(p.y < 0))
                             g.masiv[p.y, p.x] = 0;
 
-                        if (rotatePoint.x + 1 > 0  && rotatePoint.x + 1 < 12 && p.y - 1 < 22)
+                        if (rotatePoint.x + 1 > 0  && rotatePoint.x + 1 < 11 && p.y - 1 < 22)
                         {
                             p.x = rotatePoint.x + 1;
                             p.y -= 1;
@@ -631,6 +631,11 @@ namespace Tetris
 
                     if (mistakeFlag)
                     {
+                        foreach(Point point in figure)
+                        {
+                            g.masiv[point.y, point.x] = 0;
+                        }
+
                         figure = tempFigure;
                         break;
                     }

@@ -17,7 +17,7 @@ namespace Tetris
         public Form1()
         {
             InitializeComponent();
-            shapeCB.SelectedIndex = 0;
+            shapeCB.SelectedIndex = 1;
         }
 
         

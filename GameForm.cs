@@ -15,6 +15,12 @@ namespace Tetris
         public int[,] masiv = new int[22, 12];
         int score=0;
 
+        Image grayImage = Image.FromFile("gray21.png");
+        Image orangeImage = Image.FromFile("orange211.png");
+        Image redImage = Image.FromFile("red21.png");
+
+        System.Media.SoundPlayer soundPlayer = new System.Media.SoundPlayer();
+
         Figure f;
 
 
@@ -24,6 +30,9 @@ namespace Tetris
 
             f = new Figure(this);
 
+            soundPlayer.SoundLocation = "tetris02.wav";
+           
+
             setLabels();
 
             setFrame(masiv);
@@ -32,7 +41,7 @@ namespace Tetris
 
             if (speed == 1)
             {
-                timer1.Interval = 220;
+                timer1.Interval = 400;
             }
             else if(speed==2)
             {
@@ -41,10 +50,11 @@ namespace Tetris
             }
             else
             {
-                timer1.Interval = 80;
+                timer1.Interval = 50;
             }
 
             timer1.Enabled = true;
+            soundPlayer.Play();
 
             printArray(masiv);
         }
@@ -91,7 +101,7 @@ namespace Tetris
                 MessageBox.Show("LOSE", "!!!");
 
             }
-            Invalidate();
+            //Invalidate();
         }
 
         void printArray(int[,] arr)
@@ -243,6 +253,7 @@ namespace Tetris
 
         public void closeGame()
         {
+            soundPlayer.Stop();
             this.Close();
         }
         void setLabelsFromArray(int[,] array)
@@ -256,7 +267,8 @@ namespace Tetris
                 {
                     if (array[i + 1, j + 1] == 0)
                     {
-                        tableLayoutPanel1.GetControlFromPosition(j, i).BackColor = Color.Gray;
+                        //tableLayoutPanel1.GetControlFromPosition(j, i).BackColor = Color.Gray;
+                        tableLayoutPanel1.GetControlFromPosition(j, i).BackgroundImage = grayImage;
                     }
 
                     if (array[i + 1, j + 1] == 1)
@@ -265,12 +277,14 @@ namespace Tetris
                     }
                     if (array[i + 1, j + 1] == 3)
                     {
-                        tableLayoutPanel1.GetControlFromPosition(j, i).BackColor = Color.OrangeRed;
+                      //  tableLayoutPanel1.GetControlFromPosition(j, i).BackColor = Color.OrangeRed;
+                        tableLayoutPanel1.GetControlFromPosition(j, i).BackgroundImage = orangeImage;
                     }
 
                     if (array[i + 1, j + 1] == 2)
                     {
-                        tableLayoutPanel1.GetControlFromPosition(j, i).BackColor = Color.Red;
+                        // tableLayoutPanel1.GetControlFromPosition(j, i).BackColor = Color.Red;
+                        tableLayoutPanel1.GetControlFromPosition(j, i).BackgroundImage = redImage;
                     }
                 }
             }
@@ -284,9 +298,10 @@ namespace Tetris
                 for (int j = 0; j < tableLayoutPanel1.ColumnCount; j++)
                 {
                     Label label = new Label();
+                    label.ImageAlign = ContentAlignment.MiddleLeft;
                     label.Dock = DockStyle.Fill;
                     label.BackColor = Color.Gray;
-                    label.Margin = new Padding(1);
+                    label.Margin = new Padding(0);
                     tableLayoutPanel1.Controls.Add(label,j,i);
                 }
             }
