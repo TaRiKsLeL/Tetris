@@ -38,7 +38,7 @@ namespace Tetris
 
             figure = new ArrayList();
 
-            switch (type)
+            switch (2)
             {
                 case 1:                                         //Гачок в праву сторону
                     {
@@ -252,28 +252,6 @@ namespace Tetris
             }
 
             return true;
-        }
-
-        public void rotate_point()
-        {
-            foreach (Point p in figure)
-            {
-                double s = Math.Sin((Math.PI / 180) * 90);
-                double c = Math.Cos((Math.PI / 180) * 90);
-
-                // translate point back to origin:
-                p.x -= rotatePoint.x;
-                p.y -= rotatePoint.y;
-
-                // rotate point
-                double xnew = p.x * c - p.y * s;
-                double ynew = p.x * s + p.y * c;
-
-                // translate point back:
-                p.x = (int)(xnew + rotatePoint.x);
-                p.y = (int)( ynew + rotatePoint.y);
-            }
-            
         }
 
         public void rotate()

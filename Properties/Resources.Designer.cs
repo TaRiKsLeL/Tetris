@@ -83,6 +83,16 @@ namespace Tetris.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap hwgemflu {
+            get {
+                object obj = ResourceManager.GetObject("hwgemflu", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap machqzoe {
             get {
                 object obj = ResourceManager.GetObject("machqzoe", resourceCulture);

@@ -6,6 +6,8 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace Tetris
@@ -14,6 +16,8 @@ namespace Tetris
     {
         public int[,] masiv = new int[22, 12];
         int score=0;
+
+        public static Hashtable scores2 = Form1.scores;
 
         Image grayImage = Image.FromFile("gray21.png");
         Image orangeImage = Image.FromFile("orange211.png");
@@ -27,8 +31,11 @@ namespace Tetris
         public GameForm(int shapeColor, int speed)
         {
             InitializeComponent();
+            this.FormClosing += GameForm_FormClosing;
 
             f = new Figure(this);
+
+
 
             soundPlayer.SoundLocation = "tetris02.wav";
            
@@ -54,7 +61,7 @@ namespace Tetris
             }
 
             timer1.Enabled = true;
-            soundPlayer.Play();
+            soundPlayer.PlayLooping();
 
             printArray(masiv);
         }
@@ -98,7 +105,7 @@ namespace Tetris
             {
                 timer1.Enabled = false;
                 closeGame();
-                MessageBox.Show("LOSE", "!!!");
+                
 
             }
             //Invalidate();
@@ -246,13 +253,44 @@ namespace Tetris
                 {
                     f.rotate();
                 }
-                //f.rotate_point();
                 
+            }
+        }
+
+        private void GameForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            switch (e.CloseReason)
+            {
+                case CloseReason.ApplicationExitCall:
+                    // The Exit method of the Application class was called.  
+                    break;
+                case CloseReason.FormOwnerClosing:
+                    // The owner form is closing.  
+                    break;
+                case CloseReason.MdiFormClosing:
+                    // The parent form is closing.  
+                    break;
+                case CloseReason.None:
+                    // Unknown closing reason.  
+                    break;
+                case CloseReason.TaskManagerClosing:
+                    // The application is being closed from the TaskManager.  
+                    break;
+                case CloseReason.UserClosing:
+                    soundPlayer.Stop();
+                    //this.Close();
+                    // The user is closing the form through the UI.  
+                    break;
+                case CloseReason.WindowsShutDown:
+                    // Windows is closing the application because it is shutting down.  
+                    break;
             }
         }
 
         public void closeGame()
         {
+            MessageBox.Show("LOSE", "!!!");
+            scores2.Add(DateTime.Now.ToString("HH:mm:ss"), score);
             soundPlayer.Stop();
             this.Close();
         }
@@ -312,6 +350,9 @@ namespace Tetris
            
         }
 
-        
+        private void GameForm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

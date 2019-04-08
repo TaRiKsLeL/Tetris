@@ -162,6 +162,7 @@
             this.signUpBtn.TabIndex = 6;
             this.signUpBtn.Text = "HIGH SCORE";
             this.signUpBtn.UseVisualStyleBackColor = false;
+            this.signUpBtn.Click += new System.EventHandler(this.signUpBtn_Click);
             // 
             // Form1
             // 
@@ -176,6 +177,7 @@
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.startBtn);
             this.Controls.Add(this.label1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "Form1";
             this.Text = "TETRIS";
             this.groupBox1.ResumeLayout(false);

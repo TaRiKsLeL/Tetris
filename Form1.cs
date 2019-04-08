@@ -7,12 +7,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Tetris
 {
     public partial class Form1 : Form
     {
-        
+
+        public static Hashtable scores = new Hashtable();
 
         public Form1()
         {
@@ -69,6 +72,11 @@ namespace Tetris
         private void groupBox1_Enter(object sender, EventArgs e)
         {
 
+        }
+
+        private void signUpBtn_Click(object sender, EventArgs e)
+        {
+            new Scores(scores).ShowDialog();
         }
     }
 }
