@@ -12,6 +12,8 @@ namespace Tetris
         public int x;
         public int y;
 
+        public int toButtom;
+
         public Point(int x, int y)
         {
             this.x = x;
@@ -38,7 +40,7 @@ namespace Tetris
 
             figure = new ArrayList();
 
-            switch (2)
+            switch (type)
             {
                 case 1:                                         //Гачок в праву сторону
                     {
@@ -114,6 +116,11 @@ namespace Tetris
                     break;
             }
 
+            int h = rand.Next(0, 4);
+
+            for (int i = 0; i < h; i++)
+                rotate();
+
             setFigureInArray();
             
         }
@@ -149,6 +156,79 @@ namespace Tetris
                 }
             }
 
+        }
+
+        public void moveToBottom()
+        {
+            int rows = g.masiv.GetUpperBound(0) + 1;
+            int cols = g.masiv.Length / rows;
+
+            Point nearestPoint;
+
+            int min = ((Point)figure[0]).toButtom;
+
+            int counter = 0;
+
+            int tempI, tempJ;
+
+            int[] countArr = new int[4];
+
+            foreach (Point p in figure)
+            {
+                if (p.y > 0)
+                {
+                    counter = 0;
+                    tempI = p.y;
+                    tempJ = p.x;
+
+                    for (int q = tempI+1; ; q++)
+                    {
+                        if (g.masiv[q, tempJ] == 2 || g.masiv[q, tempJ] == 1)
+                        {
+                            break;
+                        }
+                        counter++;
+                    }
+                    p.toButtom = counter;
+                }
+            }
+
+            if (counter != 0)
+            {
+
+                foreach (Point p in figure)
+                {
+                    if (p.toButtom < min)
+                    {
+                        min = p.toButtom;
+                    }
+                }
+
+                foreach (Point p in figure)
+                {
+                    if (min == p.toButtom)
+                    {
+                        nearestPoint = p;
+                    }
+                }
+
+                foreach (Point p in figure)
+                {
+                    if (!(p.x < 0) && !(p.y < 0))
+                    {
+                        g.masiv[p.y, p.x] = 0;
+                    }
+
+                }
+                foreach (Point p in figure)
+                {
+                    p.y += min;
+                    if (!(p.x < 0) && !(p.y < 0))
+                    {
+                        g.masiv[p.y, p.x] = 3;
+                    }
+                }
+            }
         }
 
         public void moveSideways(bool side)
@@ -266,9 +346,6 @@ namespace Tetris
                 {
                     if (p.x == rotatePoint.x - 1 && p.y == rotatePoint.y + 1) // точка, яка знаходить зліва на 1 і знизу на 1 від точки оберту
                     {
-                        if (!(p.x < 0) && !(p.y < 0))
-                            g.masiv[p.y, p.x] = 0;
-
                         if (p.x + 2 > 0  && p.x + 2 < 12 && p.y < 22)
                         {
                             p.x += 2;
@@ -283,16 +360,11 @@ namespace Tetris
                             mistakeFlag = true;
                         }
 
-                        if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
-                            g.masiv[p.y, p.x] = 3;
                     }
 
 
                     else if (p.x == rotatePoint.x && p.y == rotatePoint.y + 1)
                     {
-                        if (!(p.x < 0) && !(p.y < 0))
-                            g.masiv[p.y, p.x] = 0;
-
                         if (rotatePoint.x + 1 > 0  && rotatePoint.x + 1 < 11 && p.y - 1 < 22)
                         {
                             p.x = rotatePoint.x + 1;
@@ -311,16 +383,11 @@ namespace Tetris
                             mistakeFlag = true;
                         }
 
-
-                        if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
-                            g.masiv[p.y, p.x] = 3;
                     }
 
 
                     else if (p.x == rotatePoint.x + 1 && p.y == rotatePoint.y + 1)
                     {
-                        if (!(p.x < 0) && !(p.y < 0))
-                            g.masiv[p.y, p.x] = 0;
 
                         if (rotatePoint.x + 1 > 0 && rotatePoint.x + 1 < 12 && rotatePoint.y - 1 < 22)
                         {
@@ -340,17 +407,11 @@ namespace Tetris
                             mistakeFlag = true;
                         }
 
-
-                        if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
-                            g.masiv[p.y, p.x] = 3;
                     }
 
 
                     else if (p.x == rotatePoint.x + 1 && p.y == rotatePoint.y)
                     {
-                        if (!(p.x < 0) && !(p.y < 0))
-                            g.masiv[p.y, p.x] = 0;
-
                         if (rotatePoint.x > 0 &&  rotatePoint.x < 12 && p.y - 1 < 22)
                         {
                             p.x = rotatePoint.x;
@@ -370,24 +431,20 @@ namespace Tetris
                             mistakeFlag = true;
                         }
 
-
-                        if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
-                            g.masiv[p.y, p.x] = 3;
                     }
 
 
                     else if (p.x == rotatePoint.x + 1 && p.y == rotatePoint.y - 1)
                     {
-                        if (!(p.x < 0) && !(p.y < 0))
-                            g.masiv[p.y, p.x] = 0;
-
                         if (p.x - 2 > 0 && p.x - 2 < 12 && p.y < 22)
                         {
                             p.x -= 2;
-
-                            if (g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
+                            if (p.y > 0)
                             {
-                                mistakeFlag = true;
+                                if (g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
+                                {
+                                    mistakeFlag = true;
+                                }
                             }
                         }
                         else
@@ -395,14 +452,9 @@ namespace Tetris
                             mistakeFlag = true;
                         }
 
-
-                        if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
-                            g.masiv[p.y, p.x] = 3;
                     }
                     else if (p.x == rotatePoint.x && p.y == rotatePoint.y - 1)
                     {
-                        if (!(p.x < 0) && !(p.y < 0))
-                            g.masiv[p.y, p.x] = 0;
 
                         if (p.x - 1 > 0 &&  p.x - 1 < 12 && p.y + 1 < 22)
                         {
@@ -422,17 +474,11 @@ namespace Tetris
                             mistakeFlag = true;
                         }
 
-
-                        if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
-                            g.masiv[p.y, p.x] = 3;
                     }
 
 
                     else if (p.x == rotatePoint.x - 1 && p.y == rotatePoint.y - 1)
                     {
-                        if (!(p.x < 0) && !(p.y < 0))
-                            g.masiv[p.y, p.x] = 0;
-
                         if (p.x > 0 &&  p.x < 12 && p.y + 2 < 22)
                         {
                             p.y += 2;
@@ -447,17 +493,11 @@ namespace Tetris
                             mistakeFlag = true;
                         }
 
-
-                        if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
-                            g.masiv[p.y, p.x] = 3;
                     }
 
 
                     else if (p.x == rotatePoint.x - 1 && p.y == rotatePoint.y)
                     {
-                        if (!(p.x < 0) && !(p.y < 0))
-                            g.masiv[p.y, p.x] = 0;
-
                         if (rotatePoint.x > 0  && rotatePoint.x < 12 && rotatePoint.y + 1 < 22)
                         {
                             p.x = rotatePoint.x;
@@ -473,15 +513,10 @@ namespace Tetris
                             mistakeFlag = true;
                         }
 
-                        if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
-                            g.masiv[p.y, p.x] = 3;
                     }
 
                     else if (p.x == rotatePoint.x && p.y == rotatePoint.y - 2)
                     {
-                        if (!(p.x < 0) && !(p.y < 0))
-                            g.masiv[p.y, p.x] = 0;
-
                         if (p.x - 2 > 0 && p.x - 2 < 12 && p.y + 2 < 22)
                         {
                             p.x -= 2;
@@ -500,16 +535,10 @@ namespace Tetris
                             mistakeFlag = true;
                         }
 
-
-                        if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
-                            g.masiv[p.y, p.x] = 3;
                     }
 
                     else if (p.x == rotatePoint.x && p.y == rotatePoint.y - 2)
                     {
-                        if (!(p.x < 0) && !(p.y < 0))
-                            g.masiv[p.y, p.x] = 0;
-
                         if ((p.x - 2 > 0)  && (p.x - 2 < 12) && (p.y + 2 < 22))
                         {
                             p.x -= 2;
@@ -525,16 +554,11 @@ namespace Tetris
                             mistakeFlag = true;
                         }
 
-
-                        if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
-                            g.masiv[p.y, p.x] = 3;
                     }
 
 
                     else if (p.x == rotatePoint.x - 2 && p.y == rotatePoint.y)
                     {
-                        if (!(p.x < 0) && !(p.y < 0))
-                            g.masiv[p.y, p.x] = 0;
 
                         if (p.x + 2 > 0  && p.x + 2 < 12 && p.y + 2 < 22)
                         {
@@ -551,43 +575,34 @@ namespace Tetris
                             mistakeFlag = true;
                         }
 
-
-                        if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
-                            g.masiv[p.y, p.x] = 3;
                     }
 
 
                     else if (p.x == rotatePoint.x && p.y == rotatePoint.y + 2)
                     {
-                        if (!(p.x < 0) && !(p.y < 0))
-                            g.masiv[p.y, p.x] = 0;
-
                         if (p.x + 2 > 0  && p.x + 2 < 12 && p.y - 2 < 22)
                         {
                             p.x += 2;
                             p.y -= 2;
 
-                            if (g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
+                            if (p.y > 0)
                             {
-                                mistakeFlag = true;
+                                if (g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
+                                {
+                                    mistakeFlag = true;
+                                }
                             }
                         }
                         else
                         {
                             mistakeFlag = true;
                         }
-
-
-                        if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
-                            g.masiv[p.y, p.x] = 3;
+                        
                     }
 
 
                     else if (p.x == rotatePoint.x + 2 && p.y == rotatePoint.y)
                     {
-                        if (!(p.x < 0) && !(p.y < 0))
-                            g.masiv[p.y, p.x] = 0;
-
                         if (p.x - 2 > 0 &&  p.x - 2 < 12 && p.y - 2 < 22)
                         {
                             p.x -= 2;
@@ -602,9 +617,7 @@ namespace Tetris
                         {
                             mistakeFlag = true;
                         }
-
-                        if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
-                            g.masiv[p.y, p.x] = 3;
+                        
                     }
 
                     if (mistakeFlag)
@@ -621,6 +634,19 @@ namespace Tetris
 
             }
 
+            if (!mistakeFlag)
+            {
+
+                foreach (Point point in tempFigure)
+                {
+                    if (!(point.x < 0) && !(point.y < 0))
+                    {
+                        g.masiv[point.y, point.x] = 0;
+                    }
+                }
+
+                setFigureInArray();
+            }
         }
 
   //      public void rotate()

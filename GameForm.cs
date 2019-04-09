@@ -37,7 +37,7 @@ namespace Tetris
 
 
 
-            soundPlayer.SoundLocation = "tetris02.wav";
+          //  soundPlayer.SoundLocation = "tetris02.wav";
            
 
             setLabels();
@@ -255,6 +255,11 @@ namespace Tetris
                 }
                 
             }
+
+            if (e.KeyCode == Keys.Down)
+            {
+                f.moveToBottom();
+            }
         }
 
         private void GameForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -277,6 +282,7 @@ namespace Tetris
                     // The application is being closed from the TaskManager.  
                     break;
                 case CloseReason.UserClosing:
+                    timer1.Enabled = false;
                     soundPlayer.Stop();
                     //this.Close();
                     // The user is closing the form through the UI.  

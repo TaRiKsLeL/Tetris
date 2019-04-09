@@ -51,6 +51,7 @@
             this.label1.Size = new System.Drawing.Size(468, 148);
             this.label1.TabIndex = 0;
             this.label1.Text = "TETRIS";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // startBtn
             // 
@@ -134,6 +135,7 @@
             this.shapeCB.Name = "shapeCB";
             this.shapeCB.Size = new System.Drawing.Size(121, 24);
             this.shapeCB.TabIndex = 3;
+            this.shapeCB.Visible = false;
             this.shapeCB.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // label2
@@ -147,6 +149,7 @@
             this.label2.Size = new System.Drawing.Size(139, 23);
             this.label2.TabIndex = 4;
             this.label2.Text = "SHAPE COLOR";
+            this.label2.Visible = false;
             this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // signUpBtn

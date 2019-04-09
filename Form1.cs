@@ -78,5 +78,10 @@ namespace Tetris
         {
             new Scores(scores).ShowDialog();
         }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
