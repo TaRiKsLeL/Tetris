@@ -19,115 +19,218 @@ namespace Tetris
             this.x = x;
             this.y = y;
         }
+
+        public Point() { }
     }
     class Figure
     {
         GameForm g;
-        int[,] figureMas;
+        
+        private static Figure nextFigureObj;
 
-        ArrayList figure;
+        public ArrayList figure;
 
         Point rotatePoint;
 
         public Random rand;
 
-        public Figure(GameForm form)
+        static bool firstTime = true;
+
+        public Figure()
         {
+        }
+
+        public Figure makeNewFigure(GameForm form)
+        {
+            Figure currentFigureObj =new Figure();
+            Point tempRotationPoint = new Point();
+
             g = form;
+
             rand = new Random();
 
-            int type = rand.Next(1,8);
+            int type = rand.Next(1, 8);
 
-            figure = new ArrayList();
+            if (firstTime)
+            {
+                nextFigureObj = new Figure();
+                currentFigureObj.figure = getRandomFIgure(type);
+                currentFigureObj.rotatePoint = rotatePoint;
+                firstTime = !firstTime;
+            }
+            else
+            {
+                currentFigureObj = nextFigureObj.DeepCopy();
+            }
+             
+            nextFigureObj.figure = getRandomFIgure(type);
+            nextFigureObj.rotatePoint = rotatePoint;
+
+            setNextFigure(g.nextFigureMasiv, nextFigureObj.figure);
+
+            setFigureInArray(currentFigureObj.figure);
+
+            currentFigureObj.g = form;
+
+            return currentFigureObj;
+        }
+
+        public Figure DeepCopy()
+        {
+            Figure kek = new Figure();
+            kek.figure = this.figure;
+            kek.rotatePoint = this.rotatePoint;
+            return kek;
+        }
+      
+        ArrayList getRandomFIgure(int type)
+        {
+            ArrayList tempFigure = new ArrayList();
 
             switch (type)
             {
                 case 1:                                         //Гачок в праву сторону
                     {
-                        figure.Add(new Point(5, -2));
-                        figure.Add(new Point(5, -1));
-                        figure.Add(new Point(5, 0));
-                        figure.Add(new Point(6, 0));
+                        tempFigure.Add(new Point(5, -2));
+                        tempFigure.Add(new Point(5, -1));
+                        tempFigure.Add(new Point(5, 0));
+                        tempFigure.Add(new Point(6, 0));
 
-                        rotatePoint = (Point)figure[1];
+                        rotatePoint = (Point)tempFigure[1];
                     }
                     break;
                 case 2:                                         //ПРЯМА
                     {
-                        figure.Add(new Point(6, -3));
-                        figure.Add(new Point(6, -2));
-                        figure.Add(new Point(6, -1));
-                        figure.Add(new Point(6, 0));
+                        tempFigure.Add(new Point(6, -3));
+                        tempFigure.Add(new Point(6, -2));
+                        tempFigure.Add(new Point(6, -1));
+                        tempFigure.Add(new Point(6, 0));
 
-                        rotatePoint = (Point)figure[2];
+                        rotatePoint = (Point)tempFigure[2];
                     }
                     break;
                 case 3:                                        //ЗМІЙКА 1
                     {
-                        figure.Add(new Point(5, 0));
-                        figure.Add(new Point(5, -1));
-                        figure.Add(new Point(6, -1));
-                        figure.Add(new Point(6, -2));
+                        tempFigure.Add(new Point(5, 0));
+                        tempFigure.Add(new Point(5, -1));
+                        tempFigure.Add(new Point(6, -1));
+                        tempFigure.Add(new Point(6, -2));
 
-                        rotatePoint = (Point)figure[2];
+                        rotatePoint = (Point)tempFigure[2];
                     }
                     break;
                 case 4:                                        //КВАДРАТ
                     {
-                        figure.Add(new Point(5, 0));
-                        figure.Add(new Point(6, 0));
-                        figure.Add(new Point(5, -1));
-                        figure.Add(new Point(6, -1));
+                        tempFigure.Add(new Point(5, 0));
+                        tempFigure.Add(new Point(6, 0));
+                        tempFigure.Add(new Point(5, -1));
+                        tempFigure.Add(new Point(6, -1));
 
-                        rotatePoint = (Point)figure[1];
+                        rotatePoint = (Point)tempFigure[1];
                     }
                     break;
                 case 5:                                        //ЗМІЙКА 2
                     {
-                        figure.Add(new Point(6, 0));
-                        figure.Add(new Point(6, -1));
-                        figure.Add(new Point(5, -1));
-                        figure.Add(new Point(5, -2));
+                        tempFigure.Add(new Point(6, 0));
+                        tempFigure.Add(new Point(6, -1));
+                        tempFigure.Add(new Point(5, -1));
+                        tempFigure.Add(new Point(5, -2));
 
-                        rotatePoint = (Point)figure[2];
+                        rotatePoint = (Point)tempFigure[2];
                     }
                     break;
 
                 case 6:                                        //ГАЧОК 2
                     {
-                        figure.Add(new Point(6, -2));
-                        figure.Add(new Point(6, -1));
-                        figure.Add(new Point(6, 0));
-                        figure.Add(new Point(5, 0));
+                        tempFigure.Add(new Point(6, -2));
+                        tempFigure.Add(new Point(6, -1));
+                        tempFigure.Add(new Point(6, 0));
+                        tempFigure.Add(new Point(5, 0));
 
-                        rotatePoint = (Point)figure[1];
+                        rotatePoint = (Point)tempFigure[1];
                     }
                     break;
 
                 case 7:                                        //НЕПЕВНИЙ ХРЕСТИК
                     {
-                        figure.Add(new Point(6, 0));
-                        figure.Add(new Point(5, 0));
-                        figure.Add(new Point(4, 0));
-                        figure.Add(new Point(5, -1));
+                        tempFigure.Add(new Point(6, 0));
+                        tempFigure.Add(new Point(5, 0));
+                        tempFigure.Add(new Point(4, 0));
+                        tempFigure.Add(new Point(5, -1));
 
-                        rotatePoint = (Point)figure[1];
+                        rotatePoint = (Point)tempFigure[1];
                     }
                     break;
             }
 
             int h = rand.Next(0, 4);
 
-            for (int i = 0; i < h; i++)
-                rotate();
+          for (int i = 0; i < h; i++)
+           rotate(tempFigure);
 
-            setFigureInArray();
-            
+            return tempFigure;
         }
 
-        public void setFigureInArray()
+        Point getRotatePoint(ArrayList arrayList)
+        { Point rotateP=new Point();
+
+            foreach(Point p in arrayList)
+            {
+                if (p == rotatePoint)
+                {
+                    rotateP = rotatePoint;
+                }
+            }
+
+            return rotateP;
+        }
+        public void setNextFigure(int[,] arr, ArrayList nextF)
         {
-            foreach (Point p in figure)
+            ArrayList tempFig = CloneAndGetToNewArrayList(nextF);
+
+            foreach (Point point in tempFig)
+            {
+                point.y += 3;
+                point.x -= 3;
+
+                arr[point.y, point.x] = 3;
+            }
+            for (int i = 0; i < arr.GetUpperBound(0) + 1; i++)
+            {
+                for (int j = 0; j < arr.Length / (arr.GetUpperBound(0) + 1); j++)
+                {
+                    if (arr[i, j] == 0)
+                    {
+                        g.tableLayoutPanel2.GetControlFromPosition(j, i).BackgroundImage = g.grayImage;
+                    }
+
+                    if (arr[i, j] == 3)
+                    {
+                        g.tableLayoutPanel2.GetControlFromPosition(j, i).BackgroundImage = g.orangeImage;
+                    }
+
+                    if (arr[i, j] == 2)
+                    {
+                        g.tableLayoutPanel2.GetControlFromPosition(j, i).BackgroundImage = g.redImage;
+                    }
+
+                }
+            }
+
+
+            for (int i = 0; i < arr.GetUpperBound(0) + 1; i++)
+            {
+                for (int j = 0; j < arr.Length / (arr.GetUpperBound(0) + 1); j++)
+                {
+                    arr[i, j] = 0;
+                }
+
+            }
+        }
+
+        public void setFigureInArray(ArrayList arrayList)
+        {
+            foreach (Point p in arrayList)
             {
                 if(!(p.x<0) && !(p.y < 0))
                 {
@@ -334,17 +437,22 @@ namespace Tetris
             return true;
         }
 
-        public void rotate()
+        public void rotate(ArrayList fig)
         {
-            ArrayList tempFigure = CloneAndGetToNewArrayList(figure); //зберігаю значення точок фігури
+            ArrayList tempFigure = CloneAndGetToNewArrayList(fig); //зберігаю значення точок фігури
 
             bool mistakeFlag = false;
 
-            foreach (Point p in figure)
+            if (rotatePoint == null)
+            {
+                Console.WriteLine("");
+            }
+
+            foreach (Point p in fig)
             {
                 if (p != rotatePoint)
                 {
-                    if (p.x == rotatePoint.x - 1 && p.y == rotatePoint.y + 1) // точка, яка знаходить зліва на 1 і знизу на 1 від точки оберту
+                    if (p.x == this.rotatePoint.x - 1 && p.y == this.rotatePoint.y + 1) // точка, яка знаходить зліва на 1 і знизу на 1 від точки оберту
                     {
                         if (p.x + 2 > 0  && p.x + 2 < 12 && p.y < 22)
                         {
@@ -622,9 +730,10 @@ namespace Tetris
 
                     if (mistakeFlag)
                     {
-                        foreach(Point point in figure)
+                        foreach(Point point in fig)
                         {
-                            g.masiv[point.y, point.x] = 0;
+                            if (!(p.x < 0) && !(p.y < 0))
+                                g.masiv[point.y, point.x] = 0;
                         }
 
                         figure = tempFigure;
@@ -645,361 +754,10 @@ namespace Tetris
                     }
                 }
 
-                setFigureInArray();
+                setFigureInArray(fig);
             }
         }
 
-  //      public void rotate()
-        //{
-        //    ArrayList tempFigure = CloneAndGetToNewArrayList(figure); //зберігаю значення точок фігури
-
-        //    bool mistakeFlag=false;
-
-        //    foreach (Point p in figure)
-        //    {
-        //        if (p != rotatePoint)
-        //        {
-        //            if (p.x == rotatePoint.x - 1 && p.y == rotatePoint.y + 1)
-        //            {
-        //                if (!(p.x < 0) && !(p.y < 0))
-        //                    g.masiv[p.y, p.x] = 0;
-
-        //                if (p.x+2 > 0 && p.y > 0 && p.x+2 < 12 && p.y < 12)
-        //                {
-        //                    p.x += 2;
-
-        //                    if (g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
-        //                    {
-        //                        mistakeFlag = true;
-        //                    }
-        //                }
-        //                else
-        //                {
-        //                    mistakeFlag = true;
-        //                }
-                        
-                        
-
-        //                if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
-        //                    g.masiv[p.y, p.x] = 3;
-        //            }
-        //            else if (p.x == rotatePoint.x && p.y == rotatePoint.y + 1)
-        //            {
-        //                if (!(p.x < 0) && !(p.y < 0))
-        //                    g.masiv[p.y, p.x] = 0;
-
-        //                if (rotatePoint.x + 1 > 0 && p.y - 1 > 0 && rotatePoint.x + 1 < 12 && p.y - 1 < 12)
-        //                {
-        //                    p.x = rotatePoint.x + 1;
-        //                    p.y -= 1;
-
-        //                    if (g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
-        //                    {
-        //                        mistakeFlag = true;
-        //                    }
-        //                }
-        //                else
-        //                {
-        //                    mistakeFlag = true;
-        //                }
-
-
-        //                if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
-        //                    g.masiv[p.y, p.x] = 3;
-        //            }
-        //            else if (p.x == rotatePoint.x + 1 && p.y == rotatePoint.y + 1)
-        //            {
-        //                if (!(p.x < 0) && !(p.y < 0))
-        //                    g.masiv[p.y, p.x] = 0;
-
-        //                if (rotatePoint.x + 1 > 0 && rotatePoint.y - 1 > 0 && rotatePoint.x + 1 < 12 && rotatePoint.y - 1 < 12)
-        //                {
-        //                    p.x = rotatePoint.x + 1;
-        //                    p.y = rotatePoint.y - 1;
-
-        //                    if (g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
-        //                    {
-        //                        mistakeFlag = true;
-        //                    }
-        //                }
-        //                else
-        //                {
-        //                    mistakeFlag = true;
-        //                }
-
-                       
-                        
-
-        //                if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
-        //                    g.masiv[p.y, p.x] = 3;
-        //            }
-        //            else if (p.x == rotatePoint.x + 1 && p.y == rotatePoint.y)
-        //            {
-        //                if (!(p.x < 0) && !(p.y < 0))
-        //                    g.masiv[p.y, p.x] = 0;
-
-        //                if (rotatePoint.x > 0 && p.y - 1 > 0 && rotatePoint.x < 12 && p.y - 1 < 12)
-        //                {
-        //                    p.x = rotatePoint.x;
-        //                    p.y -= 1;
-
-        //                    if (g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
-        //                    {
-        //                        mistakeFlag = true;
-        //                    }
-        //                }
-        //                else
-        //                {
-        //                    mistakeFlag = true;
-        //                }
-
-                        
-                       
-                        
-
-        //                if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
-        //                    g.masiv[p.y, p.x] = 3;
-        //            }
-        //            else if (p.x == rotatePoint.x + 1 && p.y == rotatePoint.y - 1)
-        //            {
-        //                if (!(p.x < 0) && !(p.y < 0))
-        //                    g.masiv[p.y, p.x] = 0;
-
-        //                if (p.x-2 > 0 && p.y > 0 && p.x - 2 < 12 && p.y < 12)
-        //                {
-        //                    p.x -= 2;
-
-        //                    if (g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
-        //                    {
-        //                        mistakeFlag = true;
-        //                    }
-        //                }
-        //                else
-        //                {
-        //                    mistakeFlag = true;
-        //                }
-
-                        
-                        
-
-        //                if (!(p.x < 0) && !(p.y < 0) && mistakeFlag!=true)
-        //                    g.masiv[p.y, p.x] = 3;
-        //            }
-        //            else if (p.x == rotatePoint.x && p.y == rotatePoint.y - 1)
-        //            {
-        //                if (!(p.x < 0) && !(p.y < 0))
-        //                    g.masiv[p.y, p.x] = 0;
-
-        //                if (p.x - 1 > 0 && p.y+1 > 0 && p.x -1 < 12 && p.y+1 < 12)
-        //                {
-        //                    p.x -= 1;
-        //                    p.y += 1;
-
-        //                    if (g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
-        //                    {
-        //                        mistakeFlag = true;
-        //                    }
-        //                }
-        //                else
-        //                {
-        //                    mistakeFlag = true;
-        //                }
-
-                        
-                        
-
-        //                if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
-        //                    g.masiv[p.y, p.x] = 3;
-        //            }
-        //            else if (p.x == rotatePoint.x - 1 && p.y == rotatePoint.y - 1)
-        //            {
-        //                if (!(p.x < 0) && !(p.y < 0))
-        //                    g.masiv[p.y, p.x] = 0;
-
-        //                if (p.x > 0 && p.y + 2 > 0 && p.x < 12 && p.y + 2 < 12)
-        //                {
-        //                    p.y += 2;
-
-        //                    if (g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
-        //                    {
-        //                        mistakeFlag = true;
-        //                    }
-        //                }
-        //                else
-        //                {
-        //                    mistakeFlag = true;
-        //                }
-
-
-
-        //                if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
-        //                    g.masiv[p.y, p.x] = 3;
-        //            }
-        //            else if (p.x == rotatePoint.x - 1 && p.y == rotatePoint.y)
-        //            {
-        //                if (!(p.x < 0) && !(p.y < 0))
-        //                    g.masiv[p.y, p.x] = 0;
-
-        //                if (rotatePoint.x > 0 && rotatePoint.y + 1 > 0 && rotatePoint.x < 12 && rotatePoint.y + 1 < 12)
-        //                {
-        //                    p.x = rotatePoint.x;
-        //                    p.y = rotatePoint.y + 1;
-
-        //                    if (g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
-        //                    {
-        //                        mistakeFlag = true;
-        //                    }
-        //                }
-        //                else
-        //                {
-        //                    mistakeFlag = true;
-        //                }
-
-        //                if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
-        //                    g.masiv[p.y, p.x] = 3;
-        //            }
-
-        //            else if(p.x==rotatePoint.x && p.y == rotatePoint.y - 2)
-        //            {
-        //                if (!(p.x < 0) && !(p.y < 0))
-        //                    g.masiv[p.y, p.x] = 0;
-
-        //                if (p.x-2 > 0 && p.y + 2 > 0 && p.x -2 < 12 && p.y + 2 < 12)
-        //                {
-        //                    p.x -= 2;
-        //                    p.y += 2;
-
-        //                    if (g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
-        //                    {
-        //                        mistakeFlag = true;
-        //                    }
-        //                }
-        //                else
-        //                {
-        //                    mistakeFlag = true;
-        //                }
-
-
-        //                if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
-        //                    g.masiv[p.y, p.x] = 3;
-        //            }
-
-        //            else if (p.x == rotatePoint.x && p.y == rotatePoint.y - 2)
-        //            {
-        //                if (!(p.x < 0) && !(p.y < 0))
-        //                    g.masiv[p.y, p.x] = 0;
-
-        //                if ((p.x - 2 > 0) && (p.y + 2 > 0) && (p.x - 2 < 12) && (p.y + 2 < 12))
-        //                {
-        //                    p.x -= 2;
-        //                    p.y += 2;
-
-        //                    if (g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
-        //                    {
-        //                        mistakeFlag = true;
-        //                    }
-        //                }
-        //                else
-        //                {
-        //                    mistakeFlag = true;
-        //                }
-
-
-
-
-        //                if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
-        //                    g.masiv[p.y, p.x] = 3;
-        //            }
-        //            else if (p.x == rotatePoint.x-2 && p.y == rotatePoint.y)
-        //            {
-        //                if (!(p.x < 0) && !(p.y < 0))
-        //                    g.masiv[p.y, p.x] = 0;
-
-        //                if (p.x + 2 > 0 && p.y + 2 > 0 && p.x + 2 < 12 && p.y + 2 < 12)
-        //                {
-        //                    p.x += 2;
-        //                    p.y += 2;
-
-        //                    if (g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
-        //                    {
-        //                        mistakeFlag = true;
-        //                    }
-        //                }
-        //                else
-        //                {
-        //                    mistakeFlag = true;
-        //                }
-
-                        
-                        
-
-        //                if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
-        //                    g.masiv[p.y, p.x] = 3;
-        //            }
-        //            else if (p.x == rotatePoint.x && p.y == rotatePoint.y+2)
-        //            {
-        //                if (!(p.x < 0) && !(p.y < 0))
-        //                    g.masiv[p.y, p.x] = 0;
-
-        //                if (p.x + 2 > 0 && p.y - 2 > 0 && p.x + 2 < 12 && p.y - 2 < 12)
-        //                {
-        //                    p.x += 2;
-        //                    p.y -= 2;
-
-        //                    if (g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
-        //                    {
-        //                        mistakeFlag = true;
-        //                    }
-        //                }
-        //                else
-        //                {
-        //                    mistakeFlag = true;
-        //                }
-
-                        
-                        
-
-        //                if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
-        //                    g.masiv[p.y, p.x] = 3;
-        //            }
-        //            else if (p.x == rotatePoint.x+2 && p.y == rotatePoint.y)
-        //            {
-        //                if (!(p.x < 0) && !(p.y < 0))
-        //                    g.masiv[p.y, p.x] = 0;
-
-        //                if (p.x - 2 > 0 && p.y - 2 > 0 && p.x - 2 < 12 && p.y - 2 < 12)
-        //                {
-        //                    p.x -= 2;
-        //                    p.y -= 2;
-
-        //                    if (g.masiv[p.y, p.x] == 1 || g.masiv[p.y, p.x] == 2)
-        //                    {
-        //                        mistakeFlag = true;
-        //                    }
-        //                }
-        //                else
-        //                {
-        //                    mistakeFlag = true;
-        //                }
-
-                        
-                            
-                        
-
-        //                if (!(p.x < 0) && !(p.y < 0) && mistakeFlag != true)
-        //                    g.masiv[p.y, p.x] = 3;
-        //            }
-
-        //            if (mistakeFlag)
-        //            {
-        //                figure = tempFigure;
-        //                break;
-        //            }
-        //        }
-
-        //    }
-
-        //}
 
         public ArrayList CloneAndGetToNewArrayList(ArrayList points)
         {
@@ -1077,24 +835,6 @@ namespace Tetris
             return false;
         }
 
-        public void fillArray(string t)
-        {
-            figureMas = new int[4, 4];
-
-            for (int i = 0; i < 4; i++)
-            {
-                for(int j = 0; j < 4; j++)
-                {
-                    if (t[j*4+i]=='1')
-                    {
-                        figureMas[i, j] = 1;
-                    }
-                    else
-                    {
-                        figureMas[i, j] = 0;
-                    }
-                }
-            }
-        }
+        
     }
 }

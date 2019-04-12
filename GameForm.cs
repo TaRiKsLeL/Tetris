@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections;
-using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace Tetris
@@ -15,13 +14,15 @@ namespace Tetris
     public partial class GameForm : Form
     {
         public int[,] masiv = new int[22, 12];
+        public int[,] nextFigureMasiv = new int[6, 6];
+
         int score=0;
 
         public static Hashtable scores2 = Form1.scores;
 
-        Image grayImage = Image.FromFile("gray21.png");
-        Image orangeImage = Image.FromFile("orange211.png");
-        Image redImage = Image.FromFile("red21.png");
+        public Image grayImage = Image.FromFile("gray21.png");
+        public Image orangeImage = Image.FromFile("orange211.png");
+        public Image redImage = Image.FromFile("red21.png");
 
         System.Media.SoundPlayer soundPlayer = new System.Media.SoundPlayer();
 
@@ -33,18 +34,22 @@ namespace Tetris
             InitializeComponent();
             this.FormClosing += GameForm_FormClosing;
 
-            f = new Figure(this);
 
 
 
-          //  soundPlayer.SoundLocation = "tetris02.wav";
+           soundPlayer.SoundLocation = "tetris02.wav";
            
 
-            setLabels();
+            setLabels(tableLayoutPanel1);
+            setLabels(tableLayoutPanel2);
+
+
+            f = new Figure();
+            f = f.makeNewFigure(this);
 
             setFrame(masiv);
             
-            setLabelsFromArray(masiv);
+            setLabelsFromArray(masiv,tableLayoutPanel1);
 
             if (speed == 1)
             {
@@ -77,7 +82,7 @@ namespace Tetris
                 else //якщо наступне є двійкою або одиничкою
                 {
                     f.disableFigure();
-                    f = new Figure(this);
+                    f = f.makeNewFigure(this);
                 }
 
                 if (getWinRowIndex(masiv) != 0)  //якщо фігура зупинилась і є заповнений рядок
@@ -97,8 +102,12 @@ namespace Tetris
 
                    score += 100;
                    scoreLbl.Text = "SCORE:" + score;
+                    if (score % 500 == 0)
+                    {
+                        timer1.Interval -= 20;
+                    }
                 }
-                setLabelsFromArray(masiv);
+                setLabelsFromArray(masiv,tableLayoutPanel1);
                 printArray(masiv);
             }
             else
@@ -251,7 +260,7 @@ namespace Tetris
             {
                 if (!f.ElemBelowIs(1) && !f.ElemBelowIs(2))
                 {
-                    f.rotate();
+                    f.rotate(f.figure);
                 }
                 
             }
@@ -300,10 +309,10 @@ namespace Tetris
             soundPlayer.Stop();
             this.Close();
         }
-        void setLabelsFromArray(int[,] array)
+        public void setLabelsFromArray(int[,] array, TableLayoutPanel tableLayoutPanel)
         {
-            int rows = masiv.GetUpperBound(0) + 1;
-            int cols = masiv.Length / rows;
+            int rows = array.GetUpperBound(0) + 1;
+            int cols = array.Length / rows;
 
             for (int i = 0; i < rows - 2; i++)
             {
@@ -312,41 +321,41 @@ namespace Tetris
                     if (array[i + 1, j + 1] == 0)
                     {
                         //tableLayoutPanel1.GetControlFromPosition(j, i).BackColor = Color.Gray;
-                        tableLayoutPanel1.GetControlFromPosition(j, i).BackgroundImage = grayImage;
+                        tableLayoutPanel.GetControlFromPosition(j, i).BackgroundImage = grayImage;
                     }
 
                     if (array[i + 1, j + 1] == 1)
                     {
-                        tableLayoutPanel1.GetControlFromPosition(j, i).BackColor = Color.DarkCyan;
+                        tableLayoutPanel.GetControlFromPosition(j, i).BackColor = Color.DarkCyan;
                     }
                     if (array[i + 1, j + 1] == 3)
                     {
                       //  tableLayoutPanel1.GetControlFromPosition(j, i).BackColor = Color.OrangeRed;
-                        tableLayoutPanel1.GetControlFromPosition(j, i).BackgroundImage = orangeImage;
+                        tableLayoutPanel.GetControlFromPosition(j, i).BackgroundImage = orangeImage;
                     }
 
                     if (array[i + 1, j + 1] == 2)
                     {
                         // tableLayoutPanel1.GetControlFromPosition(j, i).BackColor = Color.Red;
-                        tableLayoutPanel1.GetControlFromPosition(j, i).BackgroundImage = redImage;
+                        tableLayoutPanel.GetControlFromPosition(j, i).BackgroundImage = redImage;
                     }
                 }
             }
             
         }
 
-        void setLabels()
+        void setLabels(TableLayoutPanel tableLayoutPanel)
         {
-            for(int i=0; i < tableLayoutPanel1.RowCount; i++)
+            for(int i=0; i < tableLayoutPanel.RowCount; i++)
             {
-                for (int j = 0; j < tableLayoutPanel1.ColumnCount; j++)
+                for (int j = 0; j < tableLayoutPanel.ColumnCount; j++)
                 {
                     Label label = new Label();
                     label.ImageAlign = ContentAlignment.MiddleLeft;
                     label.Dock = DockStyle.Fill;
                     label.BackColor = Color.Gray;
                     label.Margin = new Padding(0);
-                    tableLayoutPanel1.Controls.Add(label,j,i);
+                    tableLayoutPanel.Controls.Add(label,j,i);
                 }
             }
         }
